@@ -29,7 +29,7 @@ const HostAuction = () => {
       formData.append('startTime', startTime);
       formData.append('endTime', endTime);
 
-      const res = await axios.post('http://localhost:8000/api/v1/auctions/host', 
+      const res = await axios.post('https://auction-app-3vco.onrender.com/api/v1/auctions/host', 
         formData,
         { 
           headers: { 

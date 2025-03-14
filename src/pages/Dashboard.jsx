@@ -13,7 +13,7 @@ const Dashboard = () => {
       setCurrentUser(JSON.parse(storedUser))
     }
     const fetchAuctions = () => {
-      axios.get('http://localhost:8000/api/v1/auctions')
+      axios.get('https://auction-app-3vco.onrender.com/api/v1/auctions')
         .then(res => setAuctions(res.data.data))
         .catch(err => console.error(err))
     }

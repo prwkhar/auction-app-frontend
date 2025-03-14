@@ -12,7 +12,7 @@ const AuctionDetail = () => {
 
   // Fetch Auction Data
   useEffect(() => {
-    axios.get(`http://localhost:8000/api/v1/auctions/${id}`)
+    axios.get(`https://auction-app-3vco.onrender.com/api/v1/auctions/${id}`)
       .then(res => {
         setAuction(res.data.data);
         if (res.data.data?.bids?.length > 0) {
@@ -21,7 +21,7 @@ const AuctionDetail = () => {
       })
       .catch(err => console.error(err));
 
-    const newSocket = io("http://localhost:8000", { transports: ['websocket'] });
+    const newSocket = io("https://auction-app-3vco.onrender.com", { transports: ['websocket'] });
     newSocket.emit("joinAuction", id);
     setSocket(newSocket);
 
@@ -46,7 +46,7 @@ const AuctionDetail = () => {
   const handlePlaceBid = async () => {
     try {
       const accessToken = localStorage.getItem('accessToken');
-      await axios.post('http://localhost:8000/api/v1/auctions/bid', 
+      await axios.post('https://auction-app-3vco.onrender.com/api/v1/auctions/bid', 
         { auctionId: id, bidAmount },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
