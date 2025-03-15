@@ -13,7 +13,7 @@ const Dashboard = () => {
       setCurrentUser(JSON.parse(storedUser))
     }
     const fetchAuctions = () => {
-      axios.get('https://auction-app-3vco.onrender.com/api/v1/auctions')
+      axios.get('https://auction-app-production-7a6a.up.railway.app/api/v1/auctions')
         .then(res => setAuctions(res.data.data))
         .catch(err => console.error(err))
     }
@@ -38,11 +38,30 @@ const Dashboard = () => {
         <button onClick={() => setActiveTab('history')} className={`mr-2 p-2 hover:underline duration-75 ${activeTab === 'history' ? 'text-amber-300' : 'text-white'}`}>Auction History</button>
       </div>
       {activeTab === 'available' && (
-        <div className="grid bg-green-400/50 rounded-2xl p-3 grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="realtive flex overflow-x-hidden bg-green-400/50 rounded-2xl p-3 grid-cols-1 md:grid-cols-3 gap-4">
           {availableAuctions.map(auction => (
             <AuctionCard key={auction._id} auction={auction} />
           ))}
-          {availableAuctions.length === 0 && <p>No available auctions.</p>}
+          {availableAuctions.length === 0 && (
+  <div className="marquee-container">
+    <div className="animate-marquee">
+      <span>No available auctions.</span>
+      <span>No available auctions.</span>
+      <span>No available auctions.</span>
+      <span>No available auctions.</span>
+      <span>No available auctions.</span>
+    </div>
+    {/* Duplicate content for smooth transition */}
+    <div className="animate-marquee" aria-hidden="true">
+      <span className='ml-7'>No available auctions</span>
+      <span>No available auctions</span>
+      <span>No available auctions</span>
+      <span>No available auctions</span>
+      <span>No available auctions</span>
+    </div>
+  </div>
+)}
+
         </div>
       )}
       {activeTab === 'my' && (

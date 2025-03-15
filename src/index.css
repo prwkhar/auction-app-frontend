@@ -1,1 +1,23 @@
 @import "tailwindcss";
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-container {
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+}
+
+.animate-marquee {
+  display: flex;
+  gap: 4rem; /* Space between repetitions */
+  animation: marquee 10s linear infinite;
+  width: max-content;
+}

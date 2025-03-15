@@ -10,7 +10,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post('https://auction-app-3vco.onrender.com/api/v1/users/login', 
+      const res = await axios.post('https://auction-app-production-7a6a.up.railway.app/api/v1/users/login', 
         { username, password },
         { withCredentials: true }
       )

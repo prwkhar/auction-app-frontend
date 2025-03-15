@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { io } from "socket.io-client";
 
 const AuctionDetail = () => {
   const { id } = useParams();
@@ -12,29 +12,30 @@ const AuctionDetail = () => {
 
   // Fetch Auction Data
   useEffect(() => {
-    axios.get(`https://auction-app-3vco.onrender.com/api/v1/auctions/${id}`)
-      .then(res => {
+    axios
+      .get(`https://auction-app-production-7a6a.up.railway.app/api/v1/auctions/${id}`)
+      .then((res) => {
         setAuction(res.data.data);
         if (res.data.data?.bids?.length > 0) {
           setLastBid(res.data.data.bids[res.data.data.bids.length - 1].user.username);
         }
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
 
-    const newSocket = io("https://auction-app-3vco.onrender.com", { transports: ['websocket'] });
+    const newSocket = io("https://auction-app-production-7a6a.up.railway.app", { transports: ["websocket"] });
     newSocket.emit("joinAuction", id);
     setSocket(newSocket);
 
     newSocket.on("bidUpdate", (data) => {
       if (data.auctionId === id) {
-        setAuction(prev => {
+        setAuction((prev) => {
           const updatedBids = [...prev.bids, { user: { username: data.username }, amount: data.currentBid }];
           setLastBid(data.username); // Update last bid instantly
 
           return {
             ...prev,
             currentBid: data.currentBid,
-            bids: updatedBids
+            bids: updatedBids,
           };
         });
       }
@@ -45,15 +46,16 @@ const AuctionDetail = () => {
 
   const handlePlaceBid = async () => {
     try {
-      const accessToken = localStorage.getItem('accessToken');
-      await axios.post('https://auction-app-3vco.onrender.com/api/v1/auctions/bid', 
+      const accessToken = localStorage.getItem("accessToken");
+      await axios.post(
+        "https://auction-app-production-7a6a.up.railway.app/api/v1/auctions/bid",
         { auctionId: id, bidAmount },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );
-      alert('Bid placed successfully');
+      alert("Bid placed successfully");
     } catch (err) {
       console.error(err);
-      alert('Failed to place bid');
+      alert("Failed to place bid");
     }
   };
 
@@ -68,20 +70,33 @@ const AuctionDetail = () => {
       <p className="mt-2 text-amber-300">Current Bid: ${auction.currentBid}</p>
 
       {lastBid && <p className="mt-2 text-sm text-gray-600">Last bid by: {lastBid}</p>}
-      
-      {auction.status === 'completed' && auction.winner && (
-        <p className="mt-2 text-amber-300-600">Winner: {auction.winner.username}</p>
+
+      {auction.status === "completed" && auction.winner && (
+        <p className="mt-2 text-amber-600">Winner: {auction.winner.username}</p>
       )}
-      
+
+      {/* 🚀 Marquee Effect for Ongoing Auctions */}
+      {auction.status === "ongoing" ? (
+        <div className="w-full overflow-hidden bg-gray-800 text-white py-2 mt-4">
+          <div className="flex space-x-8 animate-marquee">
+            <span className="mx-4 text-yellow-400 font-bold">Live Auction!</span>
+            <span className="mx-4 text-yellow-400 font-bold">Bid Now!</span>
+            <span className="mx-4 text-yellow-400 font-bold">Highest Bid: ${auction.currentBid}</span>
+          </div>
+        </div>
+      ) : null}
+
       <div className="mt-4">
-        <input 
-          type="number" 
-          placeholder="Your bid" 
-          value={bidAmount} 
-          onChange={(e) => setBidAmount(Number(e.target.value))} 
-          className="border p-2 text-white" 
+        <input
+          type="number"
+          placeholder="Your bid"
+          value={bidAmount}
+          onChange={(e) => setBidAmount(Number(e.target.value))}
+          className="border p-2 text-white"
         />
-        <button onClick={handlePlaceBid} className="bg-green-500 text-white p-2 ml-2 rounded-2xl hover:bg-green-700">Place Bid</button>
+        <button onClick={handlePlaceBid} className="bg-green-500 text-white p-2 ml-2 rounded-2xl hover:bg-green-700">
+          Place Bid
+        </button>
       </div>
     </div>
   );

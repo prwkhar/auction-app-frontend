@@ -7,7 +7,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://auction-app-3vco.onrender.com/api/v1/users/logout', null, {
+      await axios.post('https://auction-app-production-7a6a.up.railway.app//api/v1/users/logout', null, {
         withCredentials: true,
         headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
       })
