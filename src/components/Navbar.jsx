@@ -1,40 +1,74 @@
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import React from 'react'
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Check for user data in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser)); // Parse and set user state
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
-      await axios.post('https://auction-app-production-7a6a.up.railway.app//api/v1/users/logout', null, {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` }
-      })
+      await axios.post(
+        "https://auction-app-production-7a6a.up.railway.app/api/v1/users/logout",
+        null,
+        {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
+        }
+      );
     } catch (error) {
-      console.error("Logout error", error)
+      console.error("Logout error", error);
     }
-    localStorage.removeItem('accessToken')
-    localStorage.removeItem('user')
-    navigate('/login')
-  }
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("user");
+    setUser(null); // Remove user from state
+    navigate("/login");
+  };
 
   return (
-    <nav className="bg-gray-800 text-white p-4 w-700px">
+    <nav className="bg-gray-800 text-white p-4 w-full">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <Link to="/" className="font-bold text-xl">Auction App</Link>
-          <Link to="/" className="hover:underline">Dashboard</Link>
-          <Link to="/host" className="hover:underline">Host Auction</Link>
+          <Link to="/" className="font-bold text-xl">
+            Auction App
+          </Link>
+          <Link to="/" className="hover:underline">
+            Dashboard
+          </Link>
+          <Link to="/host" className="hover:underline">
+            Host Auction
+          </Link>
         </div>
         <div className="flex items-center space-x-4">
-          <Link to="/login" className="hover:underline">Login</Link>
-          <Link to="/register" className="hover:underline">Register</Link>
-          <button onClick={handleLogout} className="bg-red-500 px-3 py-1 rounded">Logout</button>
+          {user ? (
+            <>
+              <span className="font-semibold">👤 {user.username}</span>
+              <button onClick={handleLogout} className="bg-red-500 px-3 py-1 rounded">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="hover:underline">
+                Login
+              </Link>
+              <Link to="/register" className="hover:underline">
+                Register
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
