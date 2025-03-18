@@ -1,21 +1,33 @@
-import { Routes, Route } from 'react-router-dom'
-import Dashboard from './pages/Dashboard'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import HostAuction from './pages/HostAuction'
-import AuctionDetail from './pages/AuctionDetail'
-import Navbar from './components/Navbar'
+import { Routes, Route } from "react-router-dom";
+import { useEffect, useState } from "react";
+import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import HostAuction from "./pages/HostAuction";
+import AuctionDetail from "./pages/AuctionDetail";
+import Navbar from "./components/Navbar";
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Check if user is stored in localStorage
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   return (
     <div className="relative min-h-screen">
-      <Navbar />
+      <Navbar user={user} setUser={setUser} /> {/* 🔥 Pass user state as prop */}
+      
       {/* Background covering full scrollable area */}
       <div className="fixed top-0 left-0 w-full min-h-screen bg-[#000000] bg-[radial-gradient(#ffffff33_1px,#00091d_1px)] bg-[size:20px_20px] z-[-2]"></div>
 
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login setUser={setUser} />} /> {/* 🔥 Pass setUser */}
         <Route path="/register" element={<Register />} />
         <Route path="/host" element={<HostAuction />} />
         <Route path="/auction/:id" element={<AuctionDetail />} />
@@ -24,5 +36,4 @@ function App() {
   );
 }
 
-
-export default App
+export default App;
