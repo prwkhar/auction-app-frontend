@@ -35,6 +35,7 @@ const AuctionDetail = () => {
           return {
             ...prev,
             currentBid: data.currentBid,
+            status: data.status,
             bids: updatedBids,
           };
         });
@@ -47,17 +48,26 @@ const AuctionDetail = () => {
   const handlePlaceBid = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      await axios.post(
-        `${import.meta.env.VITE_SERVER}/api/v1/auctions/bid`,
-        { auctionId: id, bidAmount },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      );
+      await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/auctions/bid`, {
+        auctionId: id,
+        bidAmount,
+      }, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+  
       alert("Bid placed successfully");
+  
+      // ✅ Re-fetch auction data to update the status
+      axios.get(`${import.meta.env.VITE_SERVER}/api/v1/auctions/${id}`)
+        .then(res => setAuction(res.data.data))
+        .catch(err => console.error(err));
+  
     } catch (err) {
       console.error(err);
       alert("Failed to place bid");
     }
   };
+  
 
   if (!auction) return <div className="container mx-auto p-4">Loading...</div>;
 

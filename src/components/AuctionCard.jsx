@@ -5,7 +5,8 @@ const AuctionCard = ({ auction }) => {
 
   useEffect(() => {
     setLastBid(auction?.bids?.length > 0 ? auction.bids[auction.bids.length - 1] : null);
-  }, [auction, auction?.status, auction?.bids]); // Ensure re-render on status change
+  }, [auction, auction?.bids, auction?.status]); // ✅ Added status as dependency
+  ; // Ensure re-render on status change
 
   return (
     <div className="border p-4 bg-slate-500 rounded-2xl border-amber-50 shadow-black hover:shadow-lg transition flex flex-col justify-center items-center">
