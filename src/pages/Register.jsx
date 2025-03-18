@@ -25,6 +25,7 @@ const Register = () => {
 
   return (
     <div className="container bg-green-600/50 rounded-2xl mt-10 mx-auto p-4 max-w-md">
+      {console.log("Backend URL:", import.meta.env.VITE_SERVER)}
       <h1 className="text-2xl text-white font-bold mb-4">Register</h1>
       <form onSubmit={handleRegister} className="flex flex-col rounded-2xl">
         <input 

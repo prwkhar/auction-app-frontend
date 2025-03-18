@@ -8,7 +8,7 @@ const Navbar = ({ user, setUser }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/v1/users/logout`,
+        `${import.meta.env.VITE_SERVER}/api/v1/users/logout`,
         null,
         {
           withCredentials: true,

@@ -19,7 +19,7 @@ const Dashboard = () => {
 
     const fetchAuctions = () => {
       axios
-        .get(`${process.env.REACT_APP_SERVER}/api/v1/auctions`)
+        .get(`${import.meta.env.VITE_SERVER}/api/v1/auctions`)
         .then(res => setAuctions(res.data.data || []))
         .catch(err => {
           console.error('Error fetching auctions:', err);
@@ -41,6 +41,7 @@ const Dashboard = () => {
 
   return (
     <div className="container mx-auto p-4">
+      {console.log("Backend URL:", import.meta.env.VITE_SERVER)}
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
       <div className="mb-4 bg-blue-900 p-3 rounded-2xl">
         <button 
@@ -87,7 +88,7 @@ const Dashboard = () => {
               </div>
             </div>
           )}
-          {console.log("Backend URL:", process.env.REACT_APP_SERVER)}
+          {console.log("Backend URL:", import.meta.env.VITE_SERVER)}
         </div>
       )}
 

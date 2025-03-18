@@ -13,7 +13,7 @@ const Login = ({ setUser }) => {
     setloading(true);
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_SERVER}/api/v1/users/login`,
+        `${import.meta.env.VITE_SERVER}/api/v1/users/login`,
         { username, password },
         { withCredentials: true }
       );
@@ -32,6 +32,7 @@ const Login = ({ setUser }) => {
 
   return (
     <div className="container bg-green-600/50 rounded-2xl mt-10 mx-auto p-4 max-w-md">
+      {console.log("Backend URL:", import.meta.env.VITE_SERVER)}
       <h1 className="text-2xl text-white font-bold mb-4">Login</h1>
       <form onSubmit={handleLogin} className="flex flex-col rounded-2xl">
         <input 
