@@ -32,7 +32,7 @@ const HostAuction = () => {
       formData.append('startTime', startTimeUTC);
       formData.append('endTime', endTimeUTC);
   
-      const res = await axios.post('${process.env.REACT_APP_SERVER}/api/v1/auctions/host', 
+      const res = await axios.post(`${process.env.REACT_APP_SERVER}/api/v1/auctions/host`, 
         formData,
         { 
           headers: { 

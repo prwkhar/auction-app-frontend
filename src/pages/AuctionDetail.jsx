@@ -22,7 +22,7 @@ const AuctionDetail = () => {
       })
       .catch((err) => console.error(err));
 
-    const newSocket = io("${process.env.REACT_APP_SERVER}", { transports: ["websocket"] });
+    const newSocket = io(`${process.env.REACT_APP_SERVER}", { transports: ["websocket"] }`);
     newSocket.emit("joinAuction", id);
     setSocket(newSocket);
 
@@ -48,7 +48,7 @@ const AuctionDetail = () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
       await axios.post(
-        "${process.env.REACT_APP_SERVER}/api/v1/auctions/bid",
+        `${process.env.REACT_APP_SERVER}/api/v1/auctions/bid`,
         { auctionId: id, bidAmount },
         { headers: { Authorization: `Bearer ${accessToken}` } }
       );

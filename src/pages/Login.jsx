@@ -13,7 +13,7 @@ const Login = ({ setUser }) => {
     setloading(true);
     try {
       const res = await axios.post(
-        "${process.env.REACT_APP_SERVER}/api/v1/users/login",
+        `${process.env.REACT_APP_SERVER}/api/v1/users/login`,
         { username, password },
         { withCredentials: true }
       );
