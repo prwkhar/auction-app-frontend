@@ -5,10 +5,12 @@ import { useNavigate } from "react-router-dom";
 const Login = ({ setUser }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [loading,setloading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setloading(true);
     try {
       const res = await axios.post(
         "https://auction-app-production-7a6a.up.railway.app/api/v1/users/login",
@@ -25,6 +27,7 @@ const Login = ({ setUser }) => {
       console.error(err);
       alert("Login failed");
     }
+    setloading(false);
   };
 
   return (
@@ -44,8 +47,11 @@ const Login = ({ setUser }) => {
           value={password} 
           onChange={(e) => setPassword(e.target.value)} 
           className="border p-2 mb-2 rounded-2xl text-white" 
-        />
+        />{
+          loading?
         <button type="submit" className="bg-green-500 rounded-2xl mt-5 text-white p-2">Login</button>
+        :<button type="submit" className="bg-green-500 rounded-2xl mt-5 text-white p-2">Loading...</button>
+        }
       </form>
     </div>
   );
