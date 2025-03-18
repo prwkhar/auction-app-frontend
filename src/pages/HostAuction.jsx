@@ -19,16 +19,19 @@ const HostAuction = () => {
     e.preventDefault();
     try {
       const accessToken = localStorage.getItem('accessToken');
-
-      // Create FormData object
+  
+      // Convert local datetime to UTC before sending to the backend
+      const startTimeUTC = new Date(startTime).toISOString();
+      const endTimeUTC = new Date(endTime).toISOString();
+  
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
       formData.append('image', image); // File upload
       formData.append('startingBid', startingBid);
-      formData.append('startTime', startTime);
-      formData.append('endTime', endTime);
-
+      formData.append('startTime', startTimeUTC);
+      formData.append('endTime', endTimeUTC);
+  
       const res = await axios.post('https://auction-app-production-7a6a.up.railway.app/api/v1/auctions/host', 
         formData,
         { 
@@ -38,7 +41,7 @@ const HostAuction = () => {
           } 
         }
       );
-
+  
       alert('Auction hosted successfully!');
       navigate(`/auction/${res.data.data._id}`);
     } catch (err) {
@@ -46,6 +49,7 @@ const HostAuction = () => {
       alert('Failed to host auction');
     }
   };
+  
 
   return (
     <div className="bg-green-600/50 rounded-2xl mt-10 mx-auto p-4 max-w-md text-white">
