@@ -87,6 +87,7 @@ const Dashboard = () => {
               </div>
             </div>
           )}
+          {console.log("Backend URL:", process.env.REACT_APP_SERVER)}
         </div>
       )}
 
