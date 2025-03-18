@@ -49,8 +49,8 @@ const Login = ({ setUser }) => {
           className="border p-2 mb-2 rounded-2xl text-white" 
         />{
           loading?
-        <button type="submit" className="bg-green-500 rounded-2xl mt-5 text-white p-2">Login</button>
-        :<button type="submit" className="bg-green-500 rounded-2xl mt-5 text-white p-2">Loading...</button>
+        <button className="bg-green-500/50 rounded-2xl mt-5 text-white p-2">Loading...</button>
+        :<button type="submit" className="bg-green-500 rounded-2xl mt-5 text-white p-2">Login</button>
         }
       </form>
     </div>
