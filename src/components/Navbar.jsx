@@ -12,7 +12,7 @@ const Navbar = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser)); // Parse and set user state
     }
-  }, []);
+  }, [user]);
 
   const handleLogout = async () => {
     try {
