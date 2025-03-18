@@ -13,7 +13,7 @@ const Dashboard = () => {
       setCurrentUser(JSON.parse(storedUser))
     }
     const fetchAuctions = () => {
-      axios.get('https://auction-app-production-7a6a.up.railway.app/api/v1/auctions')
+      axios.get('process.env.SERVER/api/v1/auctions')
         .then(res => setAuctions(res.data.data))
         .catch(err => console.error(err))
     }

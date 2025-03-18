@@ -8,7 +8,7 @@ const Navbar = ({ user, setUser }) => {
   const handleLogout = async () => {
     try {
       await axios.post(
-        "https://auction-app-production-7a6a.up.railway.app/api/v1/users/logout",
+        "process.env.SERVER/api/v1/users/logout",
         null,
         {
           withCredentials: true,
