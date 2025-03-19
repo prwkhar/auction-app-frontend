@@ -22,27 +22,35 @@ const AuctionDetail = () => {
       })
       .catch((err) => console.error(err));
 
-    const newSocket = io(`${import.meta.env.VITE_SERVER}", { transports: ["websocket"] }`);
-    newSocket.emit("joinAuction", id);
-    setSocket(newSocket);
+    // ✅ Fixed Socket Connection Syntax
+    const newSocket = io(`${import.meta.env.VITE_SERVER}`, { transports: ["websocket"] });
+
+    newSocket.on("connect", () => {
+      console.log("Connected to WebSocket");
+      newSocket.emit("joinAuction", id);
+    });
 
     newSocket.on("bidUpdate", (data) => {
       if (data.auctionId === id) {
         setAuction((prev) => {
-          const updatedBids = [...prev.bids, { user: { username: data.username }, amount: data.currentBid }];
-          setLastBid(data.username); // Update last bid instantly
-
+          if (!prev) return prev;
           return {
             ...prev,
             currentBid: data.currentBid,
             status: data.status,
-            bids: updatedBids,
+            bids: [...prev.bids, { user: { username: data.username }, amount: data.currentBid }],
           };
         });
+        setLastBid(data.username);
       }
     });
 
-    return () => newSocket.disconnect();
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.disconnect();
+      console.log("Disconnected from WebSocket");
+    };
   }, [id]);
 
   const handlePlaceBid = async () => {
@@ -67,7 +75,6 @@ const AuctionDetail = () => {
       alert("Failed to place bid");
     }
   };
-  
 
   if (!auction) return <div className="container mx-auto p-4">Loading...</div>;
 
