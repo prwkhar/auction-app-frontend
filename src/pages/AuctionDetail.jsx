@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
@@ -8,23 +8,26 @@ const AuctionDetail = () => {
   const [auction, setAuction] = useState(null);
   const [bidAmount, setBidAmount] = useState("");
   const [socket, setSocket] = useState(null);
-  const [lastBid, setLastBid] = useState(null);
+  const lastValidStatusRef = useRef(null);
+  const lastValidBidderRef = useRef(null);
+  const lastWinnerRef = useRef(null);
 
-  // Fetch Auction Data
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_SERVER}/api/v1/auctions/${id}`)
+    axios.get(`${import.meta.env.VITE_SERVER}/api/v1/auctions/${id}`)
       .then((res) => {
         setAuction(res.data.data);
+
         if (res.data.data?.bids?.length > 0) {
-          setLastBid(res.data.data.bids[res.data.data.bids.length - 1].user.username);
+          lastValidBidderRef.current = res.data.data.bids[res.data.data.bids.length - 1].user.username;
+        }
+        if (res.data.data.status === "completed" && res.data.data.winner) {
+          lastWinnerRef.current = res.data.data.winner.username;
         }
       })
       .catch((err) => console.error(err));
 
-    // ✅ Fixed Socket Connection Syntax
     const newSocket = io(`${import.meta.env.VITE_SERVER}`, { transports: ["websocket"] });
-
+    
     newSocket.on("connect", () => {
       console.log("Connected to WebSocket");
       newSocket.emit("joinAuction", id);
@@ -32,44 +35,43 @@ const AuctionDetail = () => {
 
     newSocket.on("bidUpdate", (data) => {
       if (data.auctionId === id) {
-        setAuction((prev) => {
-          if (!prev) return prev;
-          return {
-            ...prev,
-            currentBid: data.currentBid,
-            status: data.status,
-            bids: [...prev.bids, { user: { username: data.username }, amount: data.currentBid }],
-          };
-        });
-        setLastBid(data.username);
+        setAuction((prev) => prev ? {
+          ...prev,
+          currentBid: data.currentBid,
+          status: data.status,
+          bids: [...prev.bids, { user: { username: data.username }, amount: data.currentBid }],
+        } : prev);
+        lastValidBidderRef.current = data.username;
+      }
+    });
+
+    newSocket.on("auctionStatusUpdate", ({ auctionId, status, winner }) => {
+      if (auctionId === id) {
+        setAuction((prev) => prev ? { ...prev, status } : prev);
+        if (status === "completed" && winner) {
+          lastWinnerRef.current = winner.username;
+        }
       }
     });
 
     setSocket(newSocket);
-
-    return () => {
-      newSocket.disconnect();
-      console.log("Disconnected from WebSocket");
-    };
+    return () => newSocket.disconnect();
   }, [id]);
+
+  useEffect(() => {
+    if (auction?.status) {
+      lastValidStatusRef.current = auction.status;
+    }
+  }, [auction?.status]);
 
   const handlePlaceBid = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken");
-      await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/auctions/bid`, {
-        auctionId: id,
-        bidAmount,
-      }, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-  
+      await axios.post(`${import.meta.env.VITE_SERVER}/api/v1/auctions/bid`,
+        { auctionId: id, bidAmount },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       alert("Bid placed successfully");
-  
-      // ✅ Re-fetch auction data to update the status
-      axios.get(`${import.meta.env.VITE_SERVER}/api/v1/auctions/${id}`)
-        .then(res => setAuction(res.data.data))
-        .catch(err => console.error(err));
-  
     } catch (err) {
       console.error(err);
       alert("Failed to place bid");
@@ -85,24 +87,25 @@ const AuctionDetail = () => {
       <p className="mt-4 text-white">{auction.description}</p>
       <p className="mt-2 text-amber-300">Starting Bid: ${auction.startingBid}</p>
       <p className="mt-2 text-amber-300">Current Bid: ${auction.currentBid}</p>
-
-      {lastBid && <p className="mt-2 text-sm text-gray-600">Last bid by: {lastBid}</p>}
-
-      {auction.status === "completed" && auction.winner && (
-        <p className="mt-2 text-2xl text-amber-50">Winner: {auction.winner.username}</p>
-      )}
-
-      {/* 🚀 Marquee Effect for Ongoing Auctions */}
-      {auction.status === "ongoing" ? (
+      
+      {lastValidBidderRef.current && <p className="mt-2 text-sm text-amber-300">Last bid by: {lastValidBidderRef.current}</p>}
+      
+      {lastValidStatusRef.current === "ongoing" && (
         <div className="w-full overflow-hidden bg-gray-800 text-white py-2 mt-4">
-          <div className="flex space-x-8 animate-marquee">
+          <div key={auction.currentBid} className="flex space-x-8 animate-marquee">
             <span className="mx-4 text-yellow-400 font-bold">Live Auction!</span>
             <span className="mx-4 text-yellow-400 font-bold">Bid Now!</span>
             <span className="mx-4 text-yellow-400 font-bold">Highest Bid: ${auction.currentBid}</span>
           </div>
         </div>
-      ) : null}
-
+      )}
+      
+      {lastWinnerRef.current ? (
+        <p className="mt-2 text-2xl text-amber-50">Winner: {lastWinnerRef.current}</p>
+      ) : (
+        <p className="mt-2 text-2xl text-amber-50 invisible">Winner: Placeholder</p>
+      )}
+      
       <div className="mt-4">
         <input
           type="number"
@@ -111,7 +114,10 @@ const AuctionDetail = () => {
           onChange={(e) => setBidAmount(Number(e.target.value))}
           className="border p-2 text-white"
         />
-        <button onClick={handlePlaceBid} className="bg-green-500 text-white p-2 ml-2 rounded-2xl hover:bg-green-700">
+        <button
+          onClick={handlePlaceBid}
+          className="bg-green-500 text-white p-2 ml-2 rounded-2xl hover:bg-green-700"
+        >
           Place Bid
         </button>
       </div>
