@@ -29,7 +29,11 @@ const Navbar = ({ user, setUser }) => {
     <nav className="bg-gray-800 text-white p-4 w-full">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
+          <div className="w-10 h-10">
+          <img src="/vite.svg" alt="Logo" />
+          </div>
           <Link to="/" className="font-bold text-xl">Auction App</Link>
+          
           <Link to="/" className="hover:underline">Dashboard</Link>
           <Link to="/host" className="hover:underline">Host Auction</Link>
         </div>
