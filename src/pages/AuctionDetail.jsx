@@ -89,7 +89,7 @@ const AuctionDetail = () => {
       {lastBid && <p className="mt-2 text-sm text-gray-600">Last bid by: {lastBid}</p>}
 
       {auction.status === "completed" && auction.winner && (
-        <p className="mt-2 text-amber-600">Winner: {auction.winner.username}</p>
+        <p className="mt-2 text-2xl text-amber-50">Winner: {auction.winner.username}</p>
       )}
 
       {/* 🚀 Marquee Effect for Ongoing Auctions */}

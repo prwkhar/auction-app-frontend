@@ -33,7 +33,11 @@ const Navbar = ({ user, setUser }) => {
           <img src="/vite.svg" alt="Logo" />
           </div>
           <Link to="/" className="font-bold text-xl">Auction Hub</Link>
-          <button className="bg-red-500 p-1 rounded-xl border-amber-300 border-1"><Link to="/host" className="hover:underline">Host Auction</Link></button>
+          {
+            user?
+            <button className="bg-red-500 p-1 rounded-xl border-amber-300 border-1"><Link to="/host" className="hover:underline">Host Auction</Link></button>:<div/>
+          }
+          
           
         </div>
         <div className="flex items-center space-x-4">
