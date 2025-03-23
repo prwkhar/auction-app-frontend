@@ -42,7 +42,7 @@ const Dashboard = () => {
   return (
     <div className="container mx-auto p-4">
       {console.log("Backend URL:", import.meta.env.VITE_SERVER)}
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+      <h1 className="text-2xl text-white font-bold mb-4">Dashboard</h1>
       <div className="mb-4 bg-blue-900 p-3 rounded-2xl">
         <button 
           onClick={() => setActiveTab('available')} 
