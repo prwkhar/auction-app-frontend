@@ -14,7 +14,7 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "https://auction-app-production-7a6a.up.railway.app/api/v1/users/register",
+        "{VITE_SERVER}/api/v1/users/register",
         { fullName, email, username, password }
       );
       alert("Registration successful. Please login.");
