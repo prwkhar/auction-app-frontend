@@ -1,12 +1,49 @@
-# React + Vite
+# 🏆 Auction Hub - Real-Time Auction Hosting Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Auction%20Hub-blue?style=flat&logo=vercel)](https://auction-app-frontend-virid.vercel.app)  
+[![Backend Repository](https://img.shields.io/badge/Backend%20Repo-Click%20Here-orange?style=flat&logo=github)](https://github.com/prwkhar/auction-app)
 
-Currently, two official plugins are available:
+Auction Hub is a **real-time auction hosting platform** built using the **MERN stack**, enabling users to **create, participate in, and bid on live auctions** seamlessly. The frontend is designed for speed and efficiency with **React, Vite, and Tailwind CSS**, while WebSockets power real-time bidding interactions.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Live Bidding** with WebSockets  
+- **Secure Authentication** using JWT  
+- **Real-time Auction Updates & Notifications**  
+- **Create, Manage, and Participate in Auctions**  
+- **Responsive & Modern UI** with Tailwind CSS  
+- **Optimized Performance** using Vite  
+
+---
+
+## 🛠️ Tech Stack
+
+**Frontend:**  
+- React  
+- Vite  
+- Tailwind CSS  
+- Context API  
+
+**Backend:**  
+- Express.js  
+- MongoDB  
+- Socket.io  
+- JWT Authentication  
+
+---
+
+## 🎯 Getting Started
+
+### Prerequisites
+- **Node.js** (v16+ recommended)
+- **Git**
+- **MongoDB** (if running locally)
+
+📬 Contact
+Portfolio: prakharagarwal.online
+
+Email: prakharagarwal1434@gmail.com
+
+If you find this project useful, give it a ⭐!
