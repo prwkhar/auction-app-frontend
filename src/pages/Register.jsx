@@ -14,7 +14,7 @@ const Register = () => {
     e.preventDefault();
     try {
       await axios.post(
-        "{VITE_SERVER}/api/v1/users/register",
+        `${import.meta.env.VITE_SERVER}/api/v1/users/register`,
         { fullName, email, username, password }
       );
       alert("Registration successful. Please login.");
