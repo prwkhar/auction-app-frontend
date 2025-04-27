@@ -1,7 +1,7 @@
 # 🏆 Auction Hub - Real-Time Auction Hosting Platform
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Auction%20Hub-blue?style=flat&logo=vercel)](https://auction-app-frontend-virid.vercel.app)  
-[![Video](https://img.shields.io/badge/Live%20Demo-Auction%20Hub-red?style=flat&logo=youtube)](https://youtu.be/Zue1BFg-uDE) 
+[![Video](https://img.shields.io/badge/Video%20Demo-Video-Auction%20Hub-red?style=flat&logo=youtube)](https://youtu.be/Zue1BFg-uDE)  
 [![Backend Repository](https://img.shields.io/badge/Backend%20Repo-Click%20Here-orange?style=flat&logo=github)](https://github.com/prwkhar/auction-app)
 
 
